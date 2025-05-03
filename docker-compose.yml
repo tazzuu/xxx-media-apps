@@ -1,0 +1,9 @@
+# use the arr apps and shoko to rename and organize the source dirs
+# so that it can be indexed in stash
+# make sure that we pre-build a hardlink dir clone of the import files to rename them
+---
+include:
+  - "whisparr.yml"
+  - "stashapp.yml"
+  - "radarr.yml"
+  - "shoko.yml"
