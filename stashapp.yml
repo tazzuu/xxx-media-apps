@@ -1,0 +1,50 @@
+
+# https://github.com/stashapp/stash/blob/develop/docker/production/docker-compose.yml
+# use this to view all the files better akin to Plex
+---
+# APPNICENAME=Stash
+# APPDESCRIPTION=An organizer for your p*rn, written in Go
+services:
+  stash:
+    image: stashapp/stash:latest
+    container_name: stash
+    restart: unless-stopped
+    ## the container's port must be the same with the STASH_PORT in the environment section
+    ports:
+      - "9999:9999"
+    ## If you intend to use stash's DLNA functionality uncomment the below network mode and comment out the above ports section
+    # network_mode: host
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "2m"
+    environment:
+      - STASH_STASH=/mnt/media/x/Library
+      - STASH_GENERATED=/generated/
+      - STASH_METADATA=/metadata/
+      - STASH_CACHE=/cache/
+      ## Adjust below to change default port (9999)
+      - STASH_PORT=9999
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      ## Adjust below paths (the left part) to your liking.
+      ## E.g. you can change ./config:/root/.stash to ./stash:/root/.stash
+      ## The left part is the path on your host, the right part is the path in the stash container.
+
+      ## Keep configs, scrapers, and plugins here.
+      - $CONFIG_DIR/stash:/root/.stash
+      ## Point this at your collection.
+      ## The left side is where your collection is on your host, the right side is where it will be in stash.
+      # - ./data:/data
+      - /mnt/media/x:/mnt/media/x
+      - /mnt/media/Imported:/mnt/media/Imported
+      - $APP_DIR/stash:$APP_DIR/stash
+      ## This is where your stash's metadata lives
+      - $APP_DIR/stash/metadata:/metadata
+      ## Any other cache content.
+      - $APP_DIR/stash/cache:/cache
+      ## Where to store binary blob data (scene covers, images)
+      - $APP_DIR/stash/blobs:/blobs
+      ## Where to store generated content (screenshots,previews,transcodes,sprites)
+      - $APP_DIR/stash/generated:/generated
