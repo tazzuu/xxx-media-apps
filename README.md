@@ -24,6 +24,21 @@ Shoko specializes in anime library management. Since its using the aniDB (?), th
 
 Unlike Radarr and Whisparr, Shoko does not have the ability to search your indexers and trackers to look for desired media and send it to your download client for automatic download and import. So you will have to go and manually obtain your media yourself. Then configure the import to Shoko. 
 
+Like the other \*arr apps, Shoko supports renaming your media files to match consistent library file naming schemes. However unlike the \*arr apps, it does not currently have support for using the "hardlink" method to rename files (e.g. instead of moving the file to a new location with a new name, or renaming the file in place, you would want to create a hardlink to the file from a different location with a different name, so that your torrent seeds are not broken by moving or renaming the original files).
+
+To deal with this you can simply just create a copy of the original directory that your media are located in and fill the new directory with all hardlinks of the original files. Then allow Shoko to import and rename the hardlinks, instead of your original files. This works perfectly well and can be accomplished easily like this;
+
+```bash
+# /mnt/disk1/torrents/seeding is the path to your torrent downloads that are seeding
+# /mnt/disk1/Library is the location where you want Shoko to put the final renamed links to your files
+
+cp -al /mnt/disk1/torrents/seeding /mnt/disk1/torrents/seeding-hardlinks
+
+# now make sure /mnt/disk1 is mounted inside your Shoko docker container
+# configure Shoko to import FROM /mnt/disk1/torrents/seeding-hardlinks
+# and rename TO /mnt/disk1/Library
+```
+
 ### Stash
 
 Stash is a local alternative to Plex for viewing the media content on your server. 
