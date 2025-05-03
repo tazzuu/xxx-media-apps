@@ -1,0 +1,18 @@
+# https://docs.shokoanime.com/getting-started/installing-shoko-server
+# use this to categorize h on disk
+# make sure we are making a hardlink dir clone of the import files to rename them
+---
+services:
+  shoko:
+    container_name: shokox
+    image: ghcr.io/shokoanime/server:latest
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=EST
+    ports:
+      - 8111:8111
+    volumes:
+      - $CONFIG_DIR/shoko:/home/shoko/.shoko
+      - $MEDIA_DIR/x:$MEDIA_DIR/x
